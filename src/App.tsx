@@ -10,7 +10,7 @@ const rootNode = new Node({
     type: NODE_TYPE.LAYER,
     direction: DIRECTION.COLUMN,
     children: [],
-    backgroundColor: "green",
+    backgroundColor: "yellow",
 });
 
 export const ALayout = new Node({

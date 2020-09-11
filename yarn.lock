@@ -1198,6 +1198,11 @@
   dependencies:
     "@hapi/hoek" "^8.3.0"
 
+"@interactjs/types@1.9.22":
+  version "1.9.22"
+  resolved "https://registry.npm.taobao.org/@interactjs/types/download/@interactjs/types-1.9.22.tgz#1504d3170b062555b03ee8eb954ae653b7f614e2"
+  integrity sha1-FQTTFwsGJVWwPujrlUrmU7f2FOI=
+
 "@jest/console@^24.7.1", "@jest/console@^24.9.0":
   version "24.9.0"
   resolved "https://registry.npm.taobao.org/@jest/console/download/@jest/console-24.9.0.tgz?cache=0&sync_timestamp=1597057492795&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40jest%2Fconsole%2Fdownload%2F%40jest%2Fconsole-24.9.0.tgz#79b1bc06fb74a8cfb01cbdedf945584b1b9707f0"
@@ -5489,6 +5494,13 @@ inquirer@^7.0.0:
     string-width "^4.1.0"
     strip-ansi "^6.0.0"
     through "^2.3.6"
+
+interactjs@^1.9.22:
+  version "1.9.22"
+  resolved "https://registry.npm.taobao.org/interactjs/download/interactjs-1.9.22.tgz#5ae98d2dd46d720cccdb89222b4e1ddcbe5cfeb9"
+  integrity sha1-WumNLdRtcgzM24kiK04d3L5c/rk=
+  dependencies:
+    "@interactjs/types" "1.9.22"
 
 internal-ip@^4.3.0:
   version "4.3.0"

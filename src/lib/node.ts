@@ -21,6 +21,10 @@ export interface INode {
     componentName?: string;
 }
 
+export enum NODE_EVENT {
+    UPDATE = "UPDATE",
+}
+
 class Node extends EventEmitter implements INode {
     id: string;
     type: NODE_TYPE;
@@ -28,6 +32,7 @@ class Node extends EventEmitter implements INode {
     direction: DIRECTION;
     backgroundColor: string;
     componentName?: string;
+    parent: Node | null;
 
     constructor(node: INode) {
         super();
@@ -37,11 +42,16 @@ class Node extends EventEmitter implements INode {
         this.direction = node.direction;
         this.backgroundColor = node.backgroundColor;
         this.componentName = node.componentName;
+        this.parent = null;
     }
 
     addNode(node: Node) {
+        node.parent = this;
         this.children = [...this.children, node];
-        this.emit("addNode");
+        this.update();
+    }
+    update() {
+        this.emit(NODE_EVENT.UPDATE);
     }
 }
 

@@ -1,17 +1,19 @@
 import React, { Fragment, useEffect, useState } from "react";
 
-import Node from "../lib/node";
+import Node, { NODE_EVENT } from "../lib/node";
 import Factory from "./Factory";
+import Splitter from "./Splitter";
 
 const Layout = (props: { node: Node }) => {
     const { node } = props;
 
     const [childNodes, setChildNodes] = useState(node.children);
     useEffect(() => {
-        node.on("addNode", () => {
+        node.on(NODE_EVENT.UPDATE, () => {
             setChildNodes(node.children);
         });
     }, [node]);
+
     return (
         <div
             key={node.id}
@@ -24,11 +26,15 @@ const Layout = (props: { node: Node }) => {
             }}
         >
             <Factory componentName={node.componentName} />
-            <Fragment>
-                {childNodes.map((child) => (
+
+            {childNodes.map((child, index, array) => (
+                <Fragment key={child.id}>
                     <Layout key={child.id} node={child} />
-                ))}
-            </Fragment>
+                    {array.length === index + 1 ? null : (
+                        <Splitter parent={node} />
+                    )}
+                </Fragment>
+            ))}
         </div>
     );
 };

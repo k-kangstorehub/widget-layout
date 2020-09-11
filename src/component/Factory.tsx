@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect,useState } from "react";
 
 import { A_BLayout, ALayout } from "../App";
+import Widget from "./Widget";
 
 const addLayout = () => {
     ALayout.addNode(A_BLayout);
@@ -8,19 +9,25 @@ const addLayout = () => {
 
 const Factory = (props: { componentName: string | undefined }) => {
     const { componentName } = props;
+    const [component, setComponent] = useState<JSX.Element | null>(null);
+    useEffect(() => {
+        switch (componentName) {
+            case "div": {
+                setComponent(
+                    <div>
+                        <button onClick={addLayout}>test button</button>
+                    </div>
+                );
+                break;
+            }
+            default: {
+                setComponent(null);
+                break;
+            }
+        }
+    }, [componentName]);
 
-    switch (componentName) {
-        case "div": {
-            return (
-                <div>
-                    <button onClick={addLayout}>test button</button>
-                </div>
-            );
-        }
-        default: {
-            return null;
-        }
-    }
+    return <Widget>{component}</Widget>;
 };
 
 export default Factory;
