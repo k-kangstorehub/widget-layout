@@ -11,7 +11,7 @@ const useStyle = makeStyles({
         const { node } = props;
         const parent = node.parent;
         const size = parent?.children.length || 1;
-        const splitterOffset = 5 * (size - 1);
+        const splitterOffset = (10 * (size - 1)) / size;
         const width =
             parent?.direction === DIRECTION.ROW ||
             parent?.direction === DIRECTION.ROWREV
@@ -37,29 +37,13 @@ const useStyle = makeStyles({
 const Layout = (props: { node: Node }) => {
     const { node } = props;
 
-    // const [childNodes, setChildNodes] = useState(node.children);
-    // useEffect(() => {
-    //     node.on(NODE_EVENT.UPDATE, () => {
-    //         setChildNodes(node.children);
-    //     });
-    // }, [node]);
     const childNodes = useChildNodes(node);
     const classes = useStyle({
         node,
     });
 
     return (
-        <div
-            key={node.id}
-            // style={{
-            //     width: "100%",
-            //     height: "100%",
-            //     display: "flex",
-            //     backgroundColor: node.backgroundColor,
-            //     flexDirection: node.direction,
-            // }}
-            className={classes.root}
-        >
+        <div key={node.id} className={classes.root}>
             <Factory componentName={node.componentName} />
 
             {childNodes.map((child, index, array) => (

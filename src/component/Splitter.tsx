@@ -1,7 +1,32 @@
+import { makeStyles } from "@material-ui/styles";
 import interact from "interactjs";
 import React, { useEffect, useRef } from "react";
 
 import Node, { DIRECTION } from "../lib/node";
+
+const useStyle = makeStyles({
+    root: (props: { parent: Node }) => {
+        const { parent } = props;
+        return {
+            width:
+                parent.direction === DIRECTION.ROW ||
+                parent.direction === DIRECTION.ROWREV
+                    ? 10
+                    : "100%",
+            height:
+                parent?.direction === DIRECTION.ROW ||
+                parent?.direction === DIRECTION.ROWREV
+                    ? "100%"
+                    : 10,
+            // cursor:
+            //     parent.direction === DIRECTION.ROW ||
+            //     parent.direction === DIRECTION.ROWREV
+            //         ? "ew-resize"
+            //         : "ns-resize",
+            backgroundColor: "black",
+        };
+    },
+});
 
 const Splitter = (props: { parent: Node }) => {
     const { parent } = props;
@@ -28,28 +53,9 @@ const Splitter = (props: { parent: Node }) => {
         });
     }, [parent.direction]);
 
-    return (
-        <div
-            ref={ref}
-            style={{
-                width:
-                    parent.direction === DIRECTION.ROW ||
-                    parent.direction === DIRECTION.ROWREV
-                        ? 10
-                        : "100%",
-                height:
-                    parent?.direction === DIRECTION.ROW ||
-                    parent?.direction === DIRECTION.ROWREV
-                        ? "100%"
-                        : 10,
-                cursor:
-                    parent.direction === DIRECTION.ROW ||
-                    parent.direction === DIRECTION.ROWREV
-                        ? "ew-resize"
-                        : "ns-resize",
-            }}
-        />
-    );
+    const classes = useStyle({ parent });
+
+    return <div ref={ref} className={classes.root} />;
 };
 
 export default Splitter;

@@ -18,7 +18,7 @@ export const ALayout = new Node({
     type: NODE_TYPE.LAYER,
     direction: DIRECTION.COLUMN,
     children: [],
-    backgroundColor: "blue",
+    backgroundColor: "red",
 });
 
 const BLayout = new Node({
