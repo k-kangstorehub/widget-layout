@@ -33,6 +33,7 @@ class Node extends EventEmitter implements INode {
     backgroundColor: string;
     componentName?: string;
     parent: Node | null;
+    offset: number;
 
     constructor(node: INode) {
         super();
@@ -43,6 +44,7 @@ class Node extends EventEmitter implements INode {
         this.backgroundColor = node.backgroundColor;
         this.componentName = node.componentName;
         this.parent = null;
+        this.offset = 0;
     }
 
     addNode(node: Node) {

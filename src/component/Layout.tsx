@@ -1,29 +1,64 @@
-import React, { Fragment, useEffect, useState } from "react";
+import { makeStyles } from "@material-ui/styles";
+import React, { Fragment } from "react";
 
-import Node, { NODE_EVENT } from "../lib/node";
+import useChildNodes from "../hook/useChildNodes";
+import Node, { DIRECTION } from "../lib/node";
 import Factory from "./Factory";
 import Splitter from "./Splitter";
+
+const useStyle = makeStyles({
+    root: (props: { node: Node }) => {
+        const { node } = props;
+        const parent = node.parent;
+        const size = parent?.children.length || 1;
+        const splitterOffset = 5 * (size - 1);
+        const width =
+            parent?.direction === DIRECTION.ROW ||
+            parent?.direction === DIRECTION.ROWREV
+                ? `calc(${100 / parent.children.length}% - ${splitterOffset}px)`
+                : "100%";
+
+        const height =
+            parent?.direction === DIRECTION.COLUMN ||
+            parent?.direction === DIRECTION.COLUMNREV
+                ? `calc(${100 / parent.children.length}% - ${splitterOffset}px)`
+                : "100%";
+
+        return {
+            width,
+            height,
+            display: "flex",
+            backgroundColor: node.backgroundColor,
+            flexDirection: node.direction,
+        };
+    },
+});
 
 const Layout = (props: { node: Node }) => {
     const { node } = props;
 
-    const [childNodes, setChildNodes] = useState(node.children);
-    useEffect(() => {
-        node.on(NODE_EVENT.UPDATE, () => {
-            setChildNodes(node.children);
-        });
-    }, [node]);
+    // const [childNodes, setChildNodes] = useState(node.children);
+    // useEffect(() => {
+    //     node.on(NODE_EVENT.UPDATE, () => {
+    //         setChildNodes(node.children);
+    //     });
+    // }, [node]);
+    const childNodes = useChildNodes(node);
+    const classes = useStyle({
+        node,
+    });
 
     return (
         <div
             key={node.id}
-            style={{
-                width: "100%",
-                height: "100%",
-                display: "flex",
-                backgroundColor: node.backgroundColor,
-                flexDirection: node.direction,
-            }}
+            // style={{
+            //     width: "100%",
+            //     height: "100%",
+            //     display: "flex",
+            //     backgroundColor: node.backgroundColor,
+            //     flexDirection: node.direction,
+            // }}
+            className={classes.root}
         >
             <Factory componentName={node.componentName} />
 
