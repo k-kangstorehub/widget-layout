@@ -1,5 +1,5 @@
 import { makeStyles } from "@material-ui/styles";
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect } from "react";
 
 import useChildNodes from "../hook/useChildNodes";
 import Node, { DIRECTION } from "../lib/node";
@@ -15,13 +15,17 @@ const useStyle = makeStyles({
         const width =
             parent?.direction === DIRECTION.ROW ||
             parent?.direction === DIRECTION.ROWREV
-                ? `calc(${100 / parent.children.length}% - ${splitterOffset}px)`
+                ? `calc(${
+                      100 / parent.children.length
+                  }% - ${splitterOffset}px + ${node.offset}px)`
                 : "100%";
 
         const height =
             parent?.direction === DIRECTION.COLUMN ||
             parent?.direction === DIRECTION.COLUMNREV
-                ? `calc(${100 / parent.children.length}% - ${splitterOffset}px)`
+                ? `calc(${
+                      100 / parent.children.length
+                  }% - ${splitterOffset}px + ${node.offset}px)`
                 : "100%";
 
         return {
@@ -41,7 +45,9 @@ const Layout = (props: { node: Node }) => {
     const classes = useStyle({
         node,
     });
-
+    useEffect(() => {
+        console.log("update ", childNodes);
+    }, [childNodes]);
     return (
         <div key={node.id} className={classes.root}>
             <Factory componentName={node.componentName} />
@@ -50,7 +56,11 @@ const Layout = (props: { node: Node }) => {
                 <Fragment key={child.id}>
                     <Layout key={child.id} node={child} />
                     {array.length === index + 1 ? null : (
-                        <Splitter parent={node} />
+                        <Splitter
+                            parent={node}
+                            firstNode={child}
+                            secondNode={array[index + 1]}
+                        />
                     )}
                 </Fragment>
             ))}

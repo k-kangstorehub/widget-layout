@@ -6,7 +6,8 @@ export default (node: Node) => {
     const [childNodes, setChildNodes] = useState(node.children);
     useEffect(() => {
         node.on(NODE_EVENT.UPDATE, () => {
-            setChildNodes(node.children);
+            console.log("test test");
+            setChildNodes([...node.children]);
         });
     }, [node]);
     return childNodes;
