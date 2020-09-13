@@ -2,12 +2,12 @@ import { makeStyles } from "@material-ui/styles";
 import React, { Fragment, useEffect } from "react";
 
 import useChildNodes from "../hook/useChildNodes";
-import Node, { DIRECTION } from "../lib/node";
+import LayoutNode, { DIRECTION } from "../lib/layout_node";
 import Factory from "./Factory";
 import Splitter from "./Splitter";
 
 const useStyle = makeStyles({
-    root: (props: { node: Node }) => {
+    root: (props: { node: LayoutNode }) => {
         const { node } = props;
         const parent = node.parent;
         const size = parent?.children.length || 1;
@@ -38,7 +38,7 @@ const useStyle = makeStyles({
     },
 });
 
-const Layout = (props: { node: Node }) => {
+const Layout = (props: { node: LayoutNode }) => {
     const { node } = props;
 
     const childNodes = useChildNodes(node);

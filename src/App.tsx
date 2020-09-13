@@ -3,60 +3,53 @@ import "./App.css";
 import React from "react";
 
 import Layout from "./component/Layout";
-import Node, { DIRECTION, NODE_TYPE } from "./lib/node";
+import LayoutNode, { DIRECTION } from "./lib/layout_node";
 
-const rootNode = new Node({
+const rootNode = new LayoutNode({
     id: "root",
-    type: NODE_TYPE.LAYER,
     direction: DIRECTION.COLUMN,
     children: [],
     backgroundColor: "yellow",
 });
 
-export const ALayout = new Node({
+export const ALayout = new LayoutNode({
     id: "A",
-    type: NODE_TYPE.LAYER,
     direction: DIRECTION.COLUMN,
     children: [],
     backgroundColor: "red",
 });
 
-const BLayout = new Node({
+const BLayout = new LayoutNode({
     id: "B",
-    type: NODE_TYPE.LAYER,
     direction: DIRECTION.ROW,
     children: [],
     backgroundColor: "red",
 });
 
-const A_ALayout = new Node({
+const A_ALayout = new LayoutNode({
     id: "A_A",
-    type: NODE_TYPE.LAYER,
     direction: DIRECTION.ROW,
     children: [],
     backgroundColor: "green",
     componentName: "div",
 });
 
-export const A_BLayout = new Node({
+export const A_BLayout = new LayoutNode({
     id: "A_B",
-    type: NODE_TYPE.LAYER,
     direction: DIRECTION.ROW,
     children: [],
     backgroundColor: "yellow",
 });
 
-const B_ALayout = new Node({
+const B_ALayout = new LayoutNode({
     id: "B_A",
-    type: NODE_TYPE.LAYER,
     direction: DIRECTION.ROW,
     children: [],
     backgroundColor: "green",
 });
 
-const B_BLayout = new Node({
+const B_BLayout = new LayoutNode({
     id: "B_B",
-    type: NODE_TYPE.LAYER,
     direction: DIRECTION.ROW,
     children: [],
     backgroundColor: "blue",

@@ -2,10 +2,10 @@ import { makeStyles } from "@material-ui/styles";
 import interact from "interactjs";
 import React, { Fragment, useEffect, useRef, useState } from "react";
 
-import Node, { DIRECTION } from "../lib/node";
+import LayoutNode, { DIRECTION } from "../lib/layout_node";
 
 const useStyle = makeStyles({
-    root: (props: { parent: Node }) => {
+    root: (props: { parent: LayoutNode }) => {
         const { parent } = props;
         return {
             width:
@@ -22,7 +22,7 @@ const useStyle = makeStyles({
         };
     },
     shadow: (props: {
-        parent: Node;
+        parent: LayoutNode;
         dragging: boolean;
         offset: { x: number; y: number };
     }) => {
@@ -60,9 +60,9 @@ const useStyle = makeStyles({
 });
 
 const Splitter = (props: {
-    parent: Node;
-    firstNode: Node;
-    secondNode: Node;
+    parent: LayoutNode;
+    firstNode: LayoutNode;
+    secondNode: LayoutNode;
 }) => {
     const { parent, firstNode, secondNode } = props;
 
