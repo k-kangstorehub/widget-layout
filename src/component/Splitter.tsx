@@ -25,21 +25,42 @@ const useStyle = makeStyles({
         parent: LayoutNode;
         dragging: boolean;
         offset: { x: number; y: number };
+        firstNode: LayoutNode;
+        secondNode: LayoutNode;
     }) => {
-        const { parent, dragging, offset } = props;
+        const { parent, dragging, offset, firstNode, secondNode } = props;
         if (!dragging) {
             return { display: "none" };
         }
-        const x =
+        let x =
             parent.direction === DIRECTION.ROW ||
             parent.direction === DIRECTION.ROWREV
                 ? offset.x
                 : 0;
-        const y =
+        let y =
             parent.direction === DIRECTION.ROW ||
             parent.direction === DIRECTION.ROWREV
                 ? 0
                 : offset.y;
+        if (
+            parent.direction === DIRECTION.ROW ||
+            parent.direction === DIRECTION.ROWREV
+        ) {
+            if (x < -firstNode.width) {
+                x = -firstNode.width;
+            }
+            if (x > secondNode.width) {
+                x = secondNode.width;
+            }
+        } else {
+            if (y < -firstNode.height) {
+                y = -firstNode.height;
+            }
+            if (y > secondNode.height) {
+                y = secondNode.height;
+            }
+        }
+
         const transform = `translate(${x}px, ${y}px)`;
 
         return {
@@ -90,16 +111,15 @@ const Splitter = (props: {
                         parent.direction === DIRECTION.ROW ||
                         parent.direction === DIRECTION.ROWREV
                     ) {
-                        console.log("test test", event.client.x - x1);
                         firstNode.offset += event.client.x - x1;
                         secondNode.offset += -(event.client.x - x1);
                     } else {
                         firstNode.offset += event.client.y - y1;
                         secondNode.offset += -(event.client.y - y1);
                     }
-                    firstNode.update();
-                    secondNode.update();
                     parent.update();
+                    // firstNode.update();
+                    // secondNode.update();
                     setDragging(false);
                 },
             },
@@ -119,7 +139,13 @@ const Splitter = (props: {
         secondNode.offset,
     ]);
 
-    const classes = useStyle({ parent, dragging, offset });
+    const classes = useStyle({
+        parent,
+        dragging,
+        offset,
+        firstNode,
+        secondNode,
+    });
 
     return (
         <Fragment>

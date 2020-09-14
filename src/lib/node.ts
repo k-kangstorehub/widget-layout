@@ -1,6 +1,6 @@
-export interface INode<C> {
+export interface INode<I extends INode<I>> {
     id: string;
-    children: Array<C>;
+    children: Array<I>;
 }
 
 export enum NODE_EVENT {

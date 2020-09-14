@@ -15,26 +15,25 @@ export enum NODE_TYPE {
 }
 
 export interface ILayoutNode extends INode<ILayoutNode> {
-    // type: NODE_TYPE;
     direction: DIRECTION;
     backgroundColor: string;
     componentName?: string;
 }
 
-class LayoutNode extends EventEmitter implements INode<LayoutNode> {
+class LayoutNode extends EventEmitter implements ILayoutNode {
     id: string;
     children: LayoutNode[];
-    // type: NODE_TYPE;
     direction: DIRECTION;
     backgroundColor: string;
     componentName?: string;
     parent: LayoutNode | null;
     offset: number;
+    height = 0;
+    width = 0;
 
     constructor(node: ILayoutNode) {
         super();
         this.id = node.id;
-        // this.type = node.type;
         this.children = node.children.map((child) => new LayoutNode(child));
         this.direction = node.direction;
         this.backgroundColor = node.backgroundColor;
@@ -50,6 +49,7 @@ class LayoutNode extends EventEmitter implements INode<LayoutNode> {
     }
     update() {
         this.emit(NODE_EVENT.UPDATE);
+        this.children.forEach((child) => child.update());
     }
 }
 

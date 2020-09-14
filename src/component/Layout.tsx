@@ -1,5 +1,5 @@
 import { makeStyles } from "@material-ui/styles";
-import React, { Fragment, useEffect } from "react";
+import React, { Fragment, useEffect, useRef } from "react";
 
 import useChildNodes from "../hook/useChildNodes";
 import LayoutNode, { DIRECTION } from "../lib/layout_node";
@@ -41,15 +41,20 @@ const useStyle = makeStyles({
 const Layout = (props: { node: LayoutNode }) => {
     const { node } = props;
 
+    const ref = useRef<HTMLDivElement>(null);
+
     const childNodes = useChildNodes(node);
     const classes = useStyle({
         node,
     });
+
     useEffect(() => {
-        console.log("update ", childNodes);
-    }, [childNodes]);
+        console.log(node.id, ref.current!.getBoundingClientRect());
+        node.width = ref.current!.getBoundingClientRect().width;
+        node.height = ref.current!.getBoundingClientRect().height;
+    }, [childNodes, node]);
     return (
-        <div key={node.id} className={classes.root}>
+        <div ref={ref} key={node.id} className={classes.root}>
             <Factory componentName={node.componentName} />
 
             {childNodes.map((child, index, array) => (
