@@ -63,8 +63,8 @@ const Layout = (props: { node: LayoutNode }) => {
                     {array.length === index + 1 ? null : (
                         <Splitter
                             parent={node}
-                            firstNode={child}
-                            secondNode={array[index + 1]}
+                            primary={child}
+                            secondary={array[index + 1]}
                         />
                     )}
                 </Fragment>
