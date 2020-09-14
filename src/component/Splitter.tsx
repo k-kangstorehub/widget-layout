@@ -1,6 +1,7 @@
 import { makeStyles } from "@material-ui/styles";
 import interact from "interactjs";
-import React, { Fragment, useEffect, useRef, useState } from "react";
+import lodash from "lodash";
+import React, { useEffect, useRef, useState } from "react";
 
 import LayoutNode, { DIRECTION } from "../lib/layout_node";
 
@@ -19,63 +20,7 @@ const useStyle = makeStyles({
                     ? "100%"
                     : 10,
             backgroundColor: "black",
-        };
-    },
-    shadow: (props: {
-        parent: LayoutNode;
-        dragging: boolean;
-        offset: { x: number; y: number };
-        primary: LayoutNode;
-        secondary: LayoutNode;
-    }) => {
-        const { parent, dragging, offset, primary, secondary } = props;
-        if (!dragging) {
-            return { display: "none" };
-        }
-        let x =
-            parent.direction === DIRECTION.ROW ||
-            parent.direction === DIRECTION.ROWREV
-                ? offset.x
-                : 0;
-        let y =
-            parent.direction === DIRECTION.ROW ||
-            parent.direction === DIRECTION.ROWREV
-                ? 0
-                : offset.y;
-        if (
-            parent.direction === DIRECTION.ROW ||
-            parent.direction === DIRECTION.ROWREV
-        ) {
-            if (x < -primary.width) {
-                x = -primary.width;
-            }
-            if (x > secondary.width) {
-                x = secondary.width;
-            }
-        } else {
-            if (y < -primary.height) {
-                y = -primary.height;
-            }
-            if (y > secondary.height) {
-                y = secondary.height;
-            }
-        }
-
-        const transform = `translate(${x}px, ${y}px)`;
-
-        return {
-            transform,
-            width:
-                parent.direction === DIRECTION.ROW ||
-                parent.direction === DIRECTION.ROWREV
-                    ? 10
-                    : "100%",
-            height:
-                parent?.direction === DIRECTION.ROW ||
-                parent?.direction === DIRECTION.ROWREV
-                    ? "100%"
-                    : 10,
-            backgroundColor: "black",
+            touchAction: "none",
         };
     },
 });
@@ -89,38 +34,54 @@ const Splitter = (props: {
 
     const ref = useRef<HTMLDivElement>(null);
     const [dragging, setDragging] = useState(false);
-    const [offset, setOffest] = useState({ x: 0, y: 0 });
     useEffect(() => {
-        let x1: number = 0;
-        let y1: number = 0;
+        let primaryOffset = 0;
+        let secondaryOffset = 0;
         interact(ref.current!).draggable({
             listeners: {
                 start: (event) => {
                     setDragging(true);
-                    x1 = event.clientX0;
-                    y1 = event.clientY0;
+                    primaryOffset = primary.offset;
+                    secondaryOffset = secondary.offset;
                 },
-                move: (event) => {
-                    setOffest({
-                        x: event.client.x - x1,
-                        y: event.client.y - y1,
-                    });
-                },
-                end: (event) => {
+                // move: (event) => {
+                //     if (
+                //         parent.direction === DIRECTION.ROW ||
+                //         parent.direction === DIRECTION.ROWREV
+                //     ) {
+                //         primary.offset =
+                //             primaryOffset + event.client.x - event.clientX0;
+                //         secondary.offset =
+                //             secondaryOffset - (event.client.x - event.clientX0);
+                //     } else {
+                //         primary.offset =
+                //             primaryOffset + event.client.y - event.clientY0;
+                //         secondary.offset =
+                //             secondaryOffset - (event.client.y - event.clientY0);
+                //     }
+                //     requestAnimationFrame(() => parent.update());
+                //     // parent.update();
+                // },
+                move: lodash.throttle((event) => {
                     if (
                         parent.direction === DIRECTION.ROW ||
                         parent.direction === DIRECTION.ROWREV
                     ) {
-                        primary.offset += event.client.x - x1;
-                        secondary.offset += -(event.client.x - x1);
+                        primary.offset =
+                            primaryOffset + event.client.x - event.clientX0;
+                        secondary.offset =
+                            secondaryOffset - (event.client.x - event.clientX0);
                     } else {
-                        primary.offset += event.client.y - y1;
-                        secondary.offset += -(event.client.y - y1);
+                        primary.offset =
+                            primaryOffset + event.client.y - event.clientY0;
+                        secondary.offset =
+                            secondaryOffset - (event.client.y - event.clientY0);
                     }
                     parent.update();
-                    // primary.update();
-                    // secondary.update();
+                }, 10),
+                end: (event) => {
                     setDragging(false);
+                    parent.update();
                 },
             },
             cursorChecker: (action, interactable, element, interacting) => {
@@ -130,30 +91,13 @@ const Splitter = (props: {
                     : "ns-resize";
             },
         });
-    }, [
-        primary,
-        primary.offset,
-        parent,
-        parent.direction,
-        secondary,
-        secondary.offset,
-    ]);
+    }, [primary, parent, secondary]);
 
     const classes = useStyle({
         parent,
-        dragging,
-        offset,
-        primary,
-        secondary,
     });
 
-    return (
-        <Fragment>
-            <div ref={ref} className={classes.root}>
-                <div className={classes.shadow} />
-            </div>
-        </Fragment>
-    );
+    return <div ref={ref} className={classes.root} />;
 };
 
 export default Splitter;

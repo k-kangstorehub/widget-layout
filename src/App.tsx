@@ -26,6 +26,13 @@ const BLayout = new LayoutNode({
     backgroundColor: "red",
 });
 
+const CLayout = new LayoutNode({
+    id: "C",
+    direction: DIRECTION.ROW,
+    children: [],
+    backgroundColor: "green",
+});
+
 const A_ALayout = new LayoutNode({
     id: "A_A",
     direction: DIRECTION.ROW,
@@ -57,6 +64,7 @@ const B_BLayout = new LayoutNode({
 
 rootNode.addNode(ALayout);
 rootNode.addNode(BLayout);
+rootNode.addNode(CLayout);
 ALayout.addNode(A_ALayout);
 // ALayout.addNode(A_BLayout);
 BLayout.addNode(B_ALayout);

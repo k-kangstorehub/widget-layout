@@ -49,7 +49,7 @@ const Layout = (props: { node: LayoutNode }) => {
     });
 
     useEffect(() => {
-        console.log(node.id, ref.current!.getBoundingClientRect());
+        // console.log(node.id, ref.current!.getBoundingClientRect());
         node.width = ref.current!.getBoundingClientRect().width;
         node.height = ref.current!.getBoundingClientRect().height;
     }, [childNodes, node]);
