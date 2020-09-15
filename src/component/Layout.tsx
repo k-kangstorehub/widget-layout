@@ -48,8 +48,6 @@ const Layout = (props: { node: LayoutNode }) => {
         node,
     });
 
-    console.log(node.id);
-
     useEffect(() => {
         // console.log(node.id, ref.current!.getBoundingClientRect());
         node.width = ref.current!.getBoundingClientRect().width;

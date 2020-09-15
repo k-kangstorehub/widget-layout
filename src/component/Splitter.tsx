@@ -1,7 +1,7 @@
 import { makeStyles } from "@material-ui/styles";
 import interact from "interactjs";
 import lodash from "lodash";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 
 import LayoutNode, { DIRECTION } from "../lib/layout_node";
 
