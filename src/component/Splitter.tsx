@@ -33,35 +33,15 @@ const Splitter = (props: {
     const { parent, primary, secondary } = props;
 
     const ref = useRef<HTMLDivElement>(null);
-    const [dragging, setDragging] = useState(false);
     useEffect(() => {
         let primaryOffset = 0;
         let secondaryOffset = 0;
         interact(ref.current!).draggable({
             listeners: {
-                start: (event) => {
-                    setDragging(true);
+                start: () => {
                     primaryOffset = primary.offset;
                     secondaryOffset = secondary.offset;
                 },
-                // move: (event) => {
-                //     if (
-                //         parent.direction === DIRECTION.ROW ||
-                //         parent.direction === DIRECTION.ROWREV
-                //     ) {
-                //         primary.offset =
-                //             primaryOffset + event.client.x - event.clientX0;
-                //         secondary.offset =
-                //             secondaryOffset - (event.client.x - event.clientX0);
-                //     } else {
-                //         primary.offset =
-                //             primaryOffset + event.client.y - event.clientY0;
-                //         secondary.offset =
-                //             secondaryOffset - (event.client.y - event.clientY0);
-                //     }
-                //     requestAnimationFrame(() => parent.update());
-                //     // parent.update();
-                // },
                 move: lodash.throttle((event) => {
                     if (
                         parent.direction === DIRECTION.ROW ||
@@ -77,14 +57,13 @@ const Splitter = (props: {
                         secondary.offset =
                             secondaryOffset - (event.client.y - event.clientY0);
                     }
-                    parent.update();
-                }, 10),
-                end: (event) => {
-                    setDragging(false);
+                    requestAnimationFrame(() => parent.update());
+                }, 16),
+                end: () => {
                     parent.update();
                 },
             },
-            cursorChecker: (action, interactable, element, interacting) => {
+            cursorChecker: () => {
                 return parent.direction === DIRECTION.ROW ||
                     parent.direction === DIRECTION.ROWREV
                     ? "ew-resize"
