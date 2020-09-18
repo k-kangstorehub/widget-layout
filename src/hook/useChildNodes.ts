@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 
-import LayoutNode from "../lib/layout_node";
-import { NODE_EVENT } from "../lib/node";
+import { LayoutNode, NODE_EVENT } from "../lib";
 
-export default (node: LayoutNode) => {
+const useChildNodes = (node: LayoutNode) => {
     const [childNodes, setChildNodes] = useState(node.children);
     useEffect(() => {
         node.on(NODE_EVENT.UPDATE, () => {
@@ -12,3 +11,5 @@ export default (node: LayoutNode) => {
     }, [node]);
     return childNodes;
 };
+
+export default useChildNodes;

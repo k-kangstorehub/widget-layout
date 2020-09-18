@@ -1,9 +1,6 @@
-import "./App.css";
-
 import React from "react";
 
-import Layout from "./component/Layout";
-import LayoutNode, { DIRECTION } from "./lib/layout_node";
+import { Layout, LayoutNode, DIRECTION } from "widget-layout";
 
 const rootNode = new LayoutNode({
     id: "root",
@@ -41,13 +38,6 @@ const A_ALayout = new LayoutNode({
     componentName: "div",
 });
 
-export const A_BLayout = new LayoutNode({
-    id: "A_B",
-    direction: DIRECTION.ROW,
-    children: [],
-    backgroundColor: "yellow",
-});
-
 const B_ALayout = new LayoutNode({
     id: "B_A",
     direction: DIRECTION.ROW,
@@ -66,7 +56,6 @@ rootNode.addNode(ALayout);
 rootNode.addNode(BLayout);
 rootNode.addNode(CLayout);
 ALayout.addNode(A_ALayout);
-// ALayout.addNode(A_BLayout);
 BLayout.addNode(B_ALayout);
 BLayout.addNode(B_BLayout);
 

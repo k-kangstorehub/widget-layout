@@ -1,11 +1,8 @@
-import React, { useEffect,useState } from "react";
+import React, { useEffect, useState } from "react";
 
-import { A_BLayout, ALayout } from "../App";
 import Widget from "./Widget";
 
-const addLayout = () => {
-    ALayout.addNode(A_BLayout);
-};
+const addLayout = () => {};
 
 const Factory = (props: { componentName: string | undefined }) => {
     const { componentName } = props;

@@ -1,44 +1,28 @@
 {
-    "name": "widget-layout",
+    "name": "example",
     "version": "0.1.0",
-    "main": "dist/index.js",
-    "types": "dist/index.d.ts",
     "private": true,
-    "workspaces": [
-        "example"
-    ],
     "dependencies": {
-        "@material-ui/styles": "^4.10.0",
         "@testing-library/jest-dom": "^4.2.4",
         "@testing-library/react": "^9.3.2",
         "@testing-library/user-event": "^7.1.2",
         "@types/jest": "^24.0.0",
-        "@types/lodash": "^4.14.161",
         "@types/node": "^12.0.0",
         "@types/react": "^16.9.0",
         "@types/react-dom": "^16.9.0",
-        "clsx": "^1.1.1",
-        "interactjs": "^1.9.22",
-        "lodash": "^4.17.20",
         "react": "^16.13.1",
         "react-dom": "^16.13.1",
         "react-scripts": "3.4.3",
         "typescript": "~3.7.2"
     },
     "scripts": {
-        "start:example": "yarn workspace example start",
+        "start": "react-scripts start",
+        "build": "react-scripts build",
         "test": "react-scripts test",
-        "lint": "eslint src/**/*.{tsx,ts} --fix",
-        "build": "tsc"
+        "eject": "react-scripts eject"
     },
     "eslintConfig": {
-        "extends": "react-app",
-        "plugins": [
-            "simple-import-sort"
-        ],
-        "rules": {
-            "simple-import-sort/sort": "warn"
-        }
+        "extends": "react-app"
     },
     "browserslist": {
         "production": [
@@ -51,8 +35,5 @@
             "last 1 firefox version",
             "last 1 safari version"
         ]
-    },
-    "devDependencies": {
-        "eslint-plugin-simple-import-sort": "^5.0.3"
     }
 }
