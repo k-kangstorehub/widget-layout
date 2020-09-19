@@ -2,9 +2,11 @@ import { makeStyles } from "@material-ui/styles";
 import React, { Fragment, useEffect, useRef } from "react";
 
 import useChildNodes from "../hook/useChildNodes";
-import LayoutNode, { DIRECTION } from "../lib/layout_node";
-import Factory from "./Factory";
+import { DIRECTION, NODE_TYPE } from "../lib";
+import LayoutNode from "../lib/layout_node";
+import WidgetNode from "../lib/widget_node";
 import Splitter from "./Splitter";
+import Widget from "./Widget";
 
 const useStyle = makeStyles({
     root: (props: { node: LayoutNode }) => {
@@ -49,17 +51,22 @@ const Layout = (props: { node: LayoutNode }) => {
     });
 
     useEffect(() => {
-        // console.log(node.id, ref.current!.getBoundingClientRect());
         node.width = ref.current!.getBoundingClientRect().width;
         node.height = ref.current!.getBoundingClientRect().height;
     }, [childNodes, node]);
-    return (
-        <div ref={ref} key={node.id} className={classes.root}>
-            <Factory componentName={node.componentName} />
 
+    console.debug(`[Info] ${node.id} update`, node);
+    return (
+        <div id={node.id} ref={ref} className={classes.root}>
             {childNodes.map((child, index, array) => (
                 <Fragment key={child.id}>
-                    <Layout key={child.id} node={child} />
+                    {child.type === NODE_TYPE.WIDGET_NODE ? (
+                        <Widget key={child.id} node={child as WidgetNode} />
+                    ) : null}
+                    {child.type === NODE_TYPE.LAYOUT_NODE ? (
+                        <Layout key={child.id} node={child as LayoutNode} />
+                    ) : null}
+
                     {array.length === index + 1 ? null : (
                         <Splitter
                             parent={node}

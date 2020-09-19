@@ -1,6 +1,3 @@
-export * from "./Factory";
-export { default as Factory } from "./Factory";
-
 export * from "./Layout";
 export { default as Layout } from "./Layout";
 

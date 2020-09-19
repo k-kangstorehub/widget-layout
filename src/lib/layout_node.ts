@@ -1,52 +1,49 @@
 import { EventEmitter } from "events";
 
-import { INode, NODE_EVENT } from "./node";
+import { DIRECTION, ILayoutNode, NODE_TYPE } from "./node";
+import INode, { NODE_EVENT } from "./node";
+import WidgetNode from "./widget_node";
 
-export enum DIRECTION {
-    COLUMN = "column",
-    COLUMNREV = "column-reverse",
-    ROW = "row",
-    ROWREV = "row-reverse",
-}
-
-export enum NODE_TYPE {
-    SPLITTER = "SPLITTER",
-    LAYER = "LAYER",
-}
-
-export interface ILayoutNode extends INode<ILayoutNode> {
-    direction: DIRECTION;
-    backgroundColor: string;
-    componentName?: string;
-}
-
-class LayoutNode extends EventEmitter implements ILayoutNode {
+class LayoutNode extends EventEmitter implements INode {
     id: string;
-    children: LayoutNode[];
+    type: NODE_TYPE;
     direction: DIRECTION;
-    backgroundColor: string;
-    componentName?: string;
+
     parent: LayoutNode | null;
-    offset: number;
+    children: Array<LayoutNode | WidgetNode> = [];
+
+    offset = 0;
     height = 0;
     width = 0;
 
-    constructor(node: ILayoutNode) {
+    backgroundColor?: string;
+
+    constructor(node: ILayoutNode, parent?: LayoutNode) {
         super();
         this.id = node.id;
-        this.children = node.children.map((child) => new LayoutNode(child));
+        this.type = node.type;
+
+        this.children = node.children
+            .map((child) => {
+                switch (child.type) {
+                    case NODE_TYPE.LAYOUT_NODE: {
+                        return new LayoutNode(child, this);
+                    }
+                    case NODE_TYPE.WIDGET_NODE: {
+                        return new WidgetNode(child, this);
+                    }
+                    default: {
+                        return null;
+                    }
+                }
+            })
+            .filter((child) => child != null) as Array<LayoutNode | WidgetNode>;
+
         this.direction = node.direction;
         this.backgroundColor = node.backgroundColor;
-        this.componentName = node.componentName;
-        this.parent = null;
-        this.offset = 0;
+        this.parent = parent || null;
     }
 
-    addNode(node: LayoutNode) {
-        node.parent = this;
-        this.children = [...this.children, node];
-        this.update();
-    }
     update() {
         this.emit(NODE_EVENT.UPDATE);
         this.children.forEach((child) => child.update());
