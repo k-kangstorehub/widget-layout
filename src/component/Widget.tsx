@@ -1,7 +1,7 @@
 import { makeStyles } from "@material-ui/styles";
-import React, { FC, useEffect, useState } from "react";
+import React from "react";
 
-import { DIRECTION, NODE_EVENT } from "../lib";
+import { DIRECTION } from "../lib";
 import WidgetNode from "../lib/widget_node";
 
 const useStyle = makeStyles({
@@ -36,22 +36,16 @@ const useStyle = makeStyles({
     }),
 });
 
-const Widget: FC<{ node: WidgetNode }> = (props) => {
-    const { children, node } = props;
-    const [counter, setCounter] = useState(0);
+const Widget = (props: { node: WidgetNode }) => {
+    const { node } = props;
     const classes = useStyle({ node });
 
-    useEffect(() => {
-        node.on(NODE_EVENT.UPDATE, () => {
-            setCounter((c) => c + 1);
-            console.log(node.offset);
-        });
-    }, [node]);
+    console.debug(`[Info] ${node.id} Widget update`);
 
     return (
         <div id={node.id} className={classes.root}>
-            <div className={classes.titlebar}></div>
-            <div>Widget{counter}</div>
+            <div className={classes.titlebar}>title</div>
+            <div>Widget</div>
         </div>
     );
 };
