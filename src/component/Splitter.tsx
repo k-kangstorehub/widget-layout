@@ -12,9 +12,6 @@ const useStyle = makeStyles({
         const { parent, dragging } = props;
         const hoverBackgroundColor = "#00000085";
         return {
-            "&:hover": {
-                backgroundColor: hoverBackgroundColor,
-            },
             width:
                 parent.direction === DIRECTION.ROW ||
                 parent.direction === DIRECTION.ROWREV

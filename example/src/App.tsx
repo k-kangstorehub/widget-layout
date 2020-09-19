@@ -20,12 +20,12 @@ const test: ILayoutNode = {
             children: [
                 {
                     id: "A_A",
-                    type: NODE_TYPE.WIDGET,
+                    type: NODE_TYPE.PANEL,
                     componentName: "button",
                 },
                 {
                     id: "A_B",
-                    type: NODE_TYPE.WIDGET,
+                    type: NODE_TYPE.PANEL,
                     componentName: "button",
                 },
             ],
@@ -42,12 +42,12 @@ const test: ILayoutNode = {
                     children: [
                         {
                             id: "B_A_A",
-                            type: NODE_TYPE.WIDGET,
+                            type: NODE_TYPE.PANEL,
                             componentName: "button",
                         },
                         {
                             id: "B_A_B",
-                            type: NODE_TYPE.WIDGET,
+                            type: NODE_TYPE.PANEL,
                             componentName: "button",
                         },
                     ],
@@ -58,12 +58,12 @@ const test: ILayoutNode = {
                     children: [
                         {
                             id: "B_B_A",
-                            type: NODE_TYPE.WIDGET,
+                            type: NODE_TYPE.PANEL,
                             componentName: "button",
                         },
                         {
                             id: "B_B_B",
-                            type: NODE_TYPE.WIDGET,
+                            type: NODE_TYPE.PANEL,
                             componentName: "button",
                         },
                     ],
@@ -76,12 +76,12 @@ const test: ILayoutNode = {
             children: [
                 {
                     id: "C_A",
-                    type: NODE_TYPE.WIDGET,
+                    type: NODE_TYPE.PANEL,
                     componentName: "button",
                 },
                 {
                     id: "C_B",
-                    type: NODE_TYPE.WIDGET,
+                    type: NODE_TYPE.PANEL,
                     componentName: "button",
                 },
             ],

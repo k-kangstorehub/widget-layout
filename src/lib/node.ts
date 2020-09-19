@@ -20,7 +20,7 @@ export enum DIRECTION {
 export enum NODE_TYPE {
     LAYOUT_NODE = "LAYOUT_NODE",
     WIDGET_NODE = "WIDGET_NODE",
-    WIDGET = "WIDGET",
+    PANEL = "PANEL",
 }
 
 export interface ILayoutNode {
@@ -35,11 +35,11 @@ export interface ILayoutNode {
 export interface IWidgetNode {
     id: string;
     type: NODE_TYPE.WIDGET_NODE;
-    children: IWidget[];
+    children: IPanel[];
 }
 
-export interface IWidget {
+export interface IPanel {
     id: string;
-    type: NODE_TYPE.WIDGET;
+    type: NODE_TYPE.PANEL;
     componentName: string;
 }

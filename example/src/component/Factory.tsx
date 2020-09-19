@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
 
-import { Widget } from "widget-layout";
-
 const addLayout = () => {};
 
 const Factory = (props: { componentName: string | undefined }) => {
