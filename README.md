@@ -10,5 +10,5 @@ cd ..
 yarn start:example
 ```
 
-While change the library,you can use `yarn build` to build a new package.
+While change the library, you can use `yarn build` to build a new package.
 The example project will refresh automatically.
