@@ -1,14 +1,22 @@
 import { makeStyles } from "@material-ui/styles";
 import interact from "interactjs";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 
+import { useStateContainer } from "../hook";
 import { DIRECTION } from "../lib";
 import WidgetNode from "../lib/widget_node";
-import DropArea, { MASK_PART } from "./DropArea";
 import Tab from "./Tab";
 
+export enum MASK_PART {
+    TOP = "top",
+    LEFT = "left",
+    BOTTOM = "bottom",
+    RIGHT = "right",
+    MIDDLE = "middle",
+}
+
 const useStyle = makeStyles({
-    root: (props: { node: WidgetNode; showDropMask: boolean }) => {
+    root: (props: { node: WidgetNode }) => {
         const { node } = props;
         const parent = node.parent;
         const size = parent?.children.length || 1;
@@ -42,31 +50,72 @@ const useStyle = makeStyles({
         position: "relative",
         height: "calc(100% - 25px)",
     }),
-    dropMask: (props: { showDropMask: boolean }) => {
-        const { showDropMask } = props;
-        return {
-            display: showDropMask ? undefined : "none",
-            position: "absolute",
-            height: "100%",
-            width: "100%",
-            backgroundColor: "#00000085",
-        };
+    top: {
+        pointerEvents: "none",
+        border: "2px dashed",
+        position: "absolute",
+        width: "calc(100% - 4px)",
+        height: "50%",
+        top: 0,
+        left: 0,
+    },
+    right: {
+        pointerEvents: "none",
+        border: "2px dashed",
+        position: "absolute",
+        width: "50%",
+        height: "calc(100% - 4px)",
+        top: 0,
+        left: 0,
+    },
+    bottom: {
+        pointerEvents: "none",
+        border: "2px dashed",
+        position: "absolute",
+        width: "calc(100% - 4px)",
+        height: "50%",
+        right: 0,
+        bottom: 0,
+    },
+    left: {
+        pointerEvents: "none",
+        border: "2px dashed",
+        position: "absolute",
+        width: "50%",
+        height: "calc(100% - 4px)",
+        bottom: 0,
+        right: 0,
+    },
+    middle: {
+        pointerEvents: "none",
+        border: "2px dashed",
+        position: "absolute",
+        width: "calc(100% - 4px)",
+        height: "calc(100% - 4px)",
+        bottom: 0,
+        right: 0,
+    },
+    hide: {
+        display: "none",
     },
 });
 
 const Widget = (props: { node: WidgetNode }) => {
     const { node } = props;
-    const [showDropMask, setShowDropMask] = useState(false);
 
-    const classes = useStyle({ node, showDropMask });
+    const classes = useStyle({ node });
     const titlebarRef = useRef<HTMLDivElement>(null);
     const widgetRef = useRef<HTMLDivElement>(null);
-    const dropMaskRef = useRef<HTMLDivElement>(null);
-    const topMaskRef = useRef<HTMLDivElement>(null);
-    const leftMaskRef = useRef<HTMLDivElement>(null);
-    const bottomMaskRef = useRef<HTMLDivElement>(null);
-    const rightMaskRef = useRef<HTMLDivElement>(null);
+    const [
+        maskPartContainer,
+        maskPart,
+        setMaskPart,
+    ] = useStateContainer<MASK_PART | null>(null);
+
+    useEffect(() => {});
+
     console.debug(`[Info] ${node.id} Widget update`);
+
     useEffect(() => {
         interact(titlebarRef.current!).dropzone({
             ondrop: (event) => {
@@ -80,24 +129,77 @@ const Widget = (props: { node: WidgetNode }) => {
             .dropzone({
                 accept: ".Tab",
             })
-            .on("dragenter", (event) => {
-                console.debug("dragenter");
-                setShowDropMask(true);
-            });
-    }, []);
+            .on("drop", (event) => {
+                setMaskPart(null);
+                console.log(
+                    "test test",
+                    maskPartContainer.current,
+                    titlebarRef.current
+                );
+            })
+            .on("dropmove", (event) => {
+                const rect = widgetRef.current?.getBoundingClientRect();
+                console.log(event.dragEvent.client.x, event.dragEvent.client.y);
+                console.log(rect?.x, rect?.y);
 
-    useEffect(() => {
-        interact(dropMaskRef.current!)
-            .dropzone({
-                ondrop: () => {
-                    setShowDropMask(false);
-                },
+                console.log(rect?.width, rect?.height);
+
+                if (rect) {
+                    if (
+                        event.dragEvent.client.x > rect.x + rect.width / 4 &&
+                        event.dragEvent.client.x <
+                            rect.x + (rect.width / 4) * 3 &&
+                        event.dragEvent.client.y > rect.y + rect.height / 4 &&
+                        event.dragEvent.client.y <
+                            rect.y + (rect.height / 4) * 3
+                    ) {
+                        console.debug("[Info] move to right");
+                        setMaskPart(MASK_PART.MIDDLE);
+                        return;
+                    }
+                    if (
+                        event.dragEvent.client.x > rect.x &&
+                        event.dragEvent.client.x < rect.x + rect.width / 4
+                    ) {
+                        console.debug("[Info] move to right");
+                        setMaskPart(MASK_PART.RIGHT);
+                        return;
+                    }
+
+                    if (
+                        event.dragEvent.client.x >
+                            rect.x + (rect.width / 4) * 3 &&
+                        event.dragEvent.client.x < rect.x + rect.width
+                    ) {
+                        console.debug("[Info] move to left");
+                        setMaskPart(MASK_PART.LEFT);
+                        return;
+                    }
+
+                    if (
+                        event.dragEvent.client.y > rect.y &&
+                        event.dragEvent.client.y < rect.y + rect.height / 4
+                    ) {
+                        console.debug("[Info] move to top");
+                        setMaskPart(MASK_PART.TOP);
+                        return;
+                    }
+
+                    if (
+                        event.dragEvent.client.y >
+                            rect.y + (rect.height / 4) * 3 &&
+                        event.dragEvent.client.y < rect.y + rect.height
+                    ) {
+                        console.debug("[Info] move to bottom");
+                        setMaskPart(MASK_PART.BOTTOM);
+                        return;
+                    }
+                }
             })
             .on("dragleave", () => {
-                console.log("dragleave");
-                setShowDropMask(false);
+                setMaskPart(null);
             });
-    }, []);
+    }, [maskPartContainer, setMaskPart]);
 
     return (
         <div id={node.id} className={classes.root}>
@@ -107,12 +209,7 @@ const Widget = (props: { node: WidgetNode }) => {
                 ))}
             </div>
             <div ref={widgetRef} className={classes.panel}>
-                <div ref={dropMaskRef} className={classes.dropMask}>
-                    <DropArea part={MASK_PART.TOP} />
-                    <DropArea part={MASK_PART.LEFT} />
-                    <DropArea part={MASK_PART.BOTTOM} />
-                    <DropArea part={MASK_PART.RIGHT} />
-                </div>
+                <div className={classes[maskPart ? maskPart : "hide"]} />
                 Panel
             </div>
         </div>
