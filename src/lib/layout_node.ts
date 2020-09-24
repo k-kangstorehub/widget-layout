@@ -17,6 +17,7 @@ class LayoutNode extends EventEmitter implements INode {
     width = 0;
 
     backgroundColor?: string;
+    
 
     constructor(node: ILayoutNode, parent?: LayoutNode) {
         super();
