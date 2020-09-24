@@ -10,7 +10,7 @@ const Tab = (props: { widget: Widget }) => {
         interact(ref.current!).draggable({});
     }, []);
     return (
-        <div ref={ref} className="Tab">
+        <div id={widget.id} ref={ref} className="Tab">
             {widget.id}
         </div>
     );

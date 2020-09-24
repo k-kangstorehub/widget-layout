@@ -9,6 +9,7 @@ class LayoutNode extends EventEmitter implements INode {
     type: NODE_TYPE;
     direction: DIRECTION;
 
+    root: LayoutNode;
     parent: LayoutNode | null;
     children: Array<LayoutNode | WidgetNode> = [];
 
@@ -18,19 +19,20 @@ class LayoutNode extends EventEmitter implements INode {
 
     backgroundColor?: string;
 
-    constructor(node: ILayoutNode, parent?: LayoutNode) {
+    constructor(node: ILayoutNode, parent?: LayoutNode, root?: LayoutNode) {
         super();
         this.id = node.id;
         this.type = node.type;
-
+        this.root = root ? root : this;
+        this.parent = parent || null;
         this.children = node.children
             .map((child) => {
                 switch (child.type) {
                     case NODE_TYPE.LAYOUT_NODE: {
-                        return new LayoutNode(child, this);
+                        return new LayoutNode(child, this, this.root);
                     }
                     case NODE_TYPE.WIDGET_NODE: {
-                        return new WidgetNode(child, this);
+                        return new WidgetNode(child, this, this.root);
                     }
                     default: {
                         return null;
@@ -41,12 +43,15 @@ class LayoutNode extends EventEmitter implements INode {
 
         this.direction = node.direction;
         this.backgroundColor = node.backgroundColor;
-        this.parent = parent || null;
     }
 
     update() {
         this.emit(NODE_EVENT.UPDATE);
         this.children.forEach((child) => child.update());
+    }
+
+    find(){
+        
     }
 }
 

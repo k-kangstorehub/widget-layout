@@ -8,16 +8,18 @@ class WidgetNode extends EventEmitter implements INode {
     id: string;
     type: NODE_TYPE = NODE_TYPE.WIDGET_NODE;
 
-    children: Panel[] = [];
+    root: LayoutNode;
     parent: LayoutNode;
+    children: Panel[] = [];
 
     offset = 0;
     height = 0;
     width = 0;
 
-    constructor(node: IWidgetNode, parent: LayoutNode) {
+    constructor(node: IWidgetNode, parent: LayoutNode, root: LayoutNode) {
         super();
         this.id = node.id;
+        this.root = root;
         this.parent = parent;
         this.children = node.children.map((child) => new Panel(child, this));
     }
